@@ -35,13 +35,13 @@ jobs:
         uses: openapi-generators/openapitools-generator-action@v1
         with:
           generator: python
-          config-file: openapi-config.yaml
-          output-dir: clients/python
+            # config-file: openapi-config.yaml
 
       - name: Commit generated client
         run: |
+          ls
           git config --local user.email "salmond44@gmail.com"
           git config --local user.name "daniel-salmon"
-          git add openapi.json clients/python
+          git add openapi.json python-client
           git commit -m "Update generated python client" || echo "No changes to commit"
           git push
