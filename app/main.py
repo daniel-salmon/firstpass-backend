@@ -194,6 +194,11 @@ def _authenticate_user(username: str, password: str, session: Session) -> User |
     return user
 
 
+@app.get("/echo")
+async def echo(words: str):
+    print(words)
+
+
 @app.post("/token", status_code=status.HTTP_200_OK, response_model=Token)
 async def token(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
