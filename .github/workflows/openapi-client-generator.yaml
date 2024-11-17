@@ -30,6 +30,7 @@ jobs:
         run: |
           cp example.env .env
           uv run python -c "import json; from app.main import app; print(json.dumps(app.openapi(), indent=2))" > openapi.json
+          rm .env
 
       - name: Generate client
         uses: openapi-generators/openapitools-generator-action@v1
@@ -38,10 +39,9 @@ jobs:
             # config-file: openapi-config.yaml
 
       - name: Commit generated client
-        run: |
-          ls
-          git config --local user.email "salmond44@gmail.com"
-          git config --local user.name "daniel-salmon"
-          git add openapi.json python-client
-          git commit -m "Update generated python client" || echo "No changes to commit"
-          git push
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Update generated python client"
+          commit_user_name: "daniel-salmon"
+          commit_user_email: "salmond44@gmail.com"
+          commit_author: "daniel salmon <salmond44@gmail.com>"
