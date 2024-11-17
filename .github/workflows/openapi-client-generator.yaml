@@ -46,7 +46,7 @@ jobs:
           CLIENT_REPO_TOKEN: ${{ secrets.CLIENT_REPO_TOKEN }}
         run: |
           git clone https://$CLIENT_REPO_TOKEN@github.com/daniel-salmon/firstpass-client.git clones/firstpass-client
-          rsync -avI --delete --exclude '.git/' python-client clones/firstpass-client
+          rsync -avI --delete --exclude '.git/' python-client/ clones/firstpass-client
           cd clones/firstpass-client
           git status --verbose
           if [ -n "$(git status --porcelain)" ]; then
