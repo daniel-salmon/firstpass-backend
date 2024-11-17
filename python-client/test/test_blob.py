@@ -14,7 +14,7 @@
 
 import unittest
 
-from openapi_client.models.blob import Blob
+from firspass_client.models.blob import Blob
 
 class TestBlob(unittest.TestCase):
     """Blob unit test stubs"""

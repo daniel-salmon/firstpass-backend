@@ -14,7 +14,7 @@
 
 import unittest
 
-from openapi_client.models.user_create import UserCreate
+from firspass_client.models.user_create import UserCreate
 
 class TestUserCreate(unittest.TestCase):
     """UserCreate unit test stubs"""

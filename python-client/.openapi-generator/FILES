@@ -1,6 +1,7 @@
 .github/workflows/python.yml
 .gitignore
 .gitlab-ci.yml
+.openapi-generator-ignore
 .travis.yml
 README.md
 docs/Blob.md
@@ -35,4 +36,12 @@ setup.cfg
 setup.py
 test-requirements.txt
 test/__init__.py
+test/test_blob.py
+test/test_default_api.py
+test/test_http_validation_error.py
+test/test_token.py
+test/test_user_create.py
+test/test_user_get.py
+test/test_validation_error.py
+test/test_validation_error_loc_inner.py
 tox.ini
