@@ -27,7 +27,9 @@ jobs:
         run: uv sync --all-extras --dev
 
       - name: Generate OpenAPI spec
-        run: uv run python -c "import json; from app.main import app; print(json.dumps(app.openapi(), indent=2))" > openapi.json
+        run: |
+          cp example.env .env
+          uv run python -c "import json; from app.main import app; print(json.dumps(app.openapi(), indent=2))" > openapi.json
 
       - name: Generate client
         uses: openapi-generators/openapitools-generator-action@v1
