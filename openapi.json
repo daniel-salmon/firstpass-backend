@@ -5,43 +5,6 @@
     "version": "0.1.0"
   },
   "paths": {
-    "/echo": {
-      "get": {
-        "summary": "Echo",
-        "operationId": "echo_echo_get",
-        "parameters": [
-          {
-            "name": "words",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "title": "Words"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/token": {
       "post": {
         "summary": "Token",
