@@ -1,4 +1,4 @@
-# openapi_client.DefaultApi
+# firspass_client.DefaultApi
 
 All URIs are relative to *http://localhost*
 
@@ -21,14 +21,14 @@ Get Blob
 * OAuth Authentication (OAuth2PasswordBearer):
 
 ```python
-import openapi_client
-from openapi_client.models.blob import Blob
-from openapi_client.rest import ApiException
+import firspass_client
+from firspass_client.models.blob import Blob
+from firspass_client.rest import ApiException
 from pprint import pprint
 
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = openapi_client.Configuration(
+configuration = firspass_client.Configuration(
     host = "http://localhost"
 )
 
@@ -40,9 +40,9 @@ configuration = openapi_client.Configuration(
 configuration.access_token = os.environ["ACCESS_TOKEN"]
 
 # Enter a context with an instance of the API client
-with openapi_client.ApiClient(configuration) as api_client:
+with firspass_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = openapi_client.DefaultApi(api_client)
+    api_instance = firspass_client.DefaultApi(api_client)
     blob_id = 'blob_id_example' # str | 
 
     try:
@@ -95,14 +95,14 @@ Get User
 * OAuth Authentication (OAuth2PasswordBearer):
 
 ```python
-import openapi_client
-from openapi_client.models.user_get import UserGet
-from openapi_client.rest import ApiException
+import firspass_client
+from firspass_client.models.user_get import UserGet
+from firspass_client.rest import ApiException
 from pprint import pprint
 
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = openapi_client.Configuration(
+configuration = firspass_client.Configuration(
     host = "http://localhost"
 )
 
@@ -114,9 +114,9 @@ configuration = openapi_client.Configuration(
 configuration.access_token = os.environ["ACCESS_TOKEN"]
 
 # Enter a context with an instance of the API client
-with openapi_client.ApiClient(configuration) as api_client:
+with firspass_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = openapi_client.DefaultApi(api_client)
+    api_instance = firspass_client.DefaultApi(api_client)
 
     try:
         # Get User
@@ -163,24 +163,24 @@ Post User
 
 
 ```python
-import openapi_client
-from openapi_client.models.token import Token
-from openapi_client.models.user_create import UserCreate
-from openapi_client.rest import ApiException
+import firspass_client
+from firspass_client.models.token import Token
+from firspass_client.models.user_create import UserCreate
+from firspass_client.rest import ApiException
 from pprint import pprint
 
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = openapi_client.Configuration(
+configuration = firspass_client.Configuration(
     host = "http://localhost"
 )
 
 
 # Enter a context with an instance of the API client
-with openapi_client.ApiClient(configuration) as api_client:
+with firspass_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = openapi_client.DefaultApi(api_client)
-    user_create = openapi_client.UserCreate() # UserCreate | 
+    api_instance = firspass_client.DefaultApi(api_client)
+    user_create = firspass_client.UserCreate() # UserCreate | 
 
     try:
         # Post User
@@ -232,14 +232,14 @@ Put Blob
 * OAuth Authentication (OAuth2PasswordBearer):
 
 ```python
-import openapi_client
-from openapi_client.models.blob import Blob
-from openapi_client.rest import ApiException
+import firspass_client
+from firspass_client.models.blob import Blob
+from firspass_client.rest import ApiException
 from pprint import pprint
 
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = openapi_client.Configuration(
+configuration = firspass_client.Configuration(
     host = "http://localhost"
 )
 
@@ -251,11 +251,11 @@ configuration = openapi_client.Configuration(
 configuration.access_token = os.environ["ACCESS_TOKEN"]
 
 # Enter a context with an instance of the API client
-with openapi_client.ApiClient(configuration) as api_client:
+with firspass_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = openapi_client.DefaultApi(api_client)
+    api_instance = firspass_client.DefaultApi(api_client)
     blob_id = 'blob_id_example' # str | 
-    blob = openapi_client.Blob() # Blob | 
+    blob = firspass_client.Blob() # Blob | 
 
     try:
         # Put Blob
@@ -305,22 +305,22 @@ Token
 
 
 ```python
-import openapi_client
-from openapi_client.models.token import Token
-from openapi_client.rest import ApiException
+import firspass_client
+from firspass_client.models.token import Token
+from firspass_client.rest import ApiException
 from pprint import pprint
 
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = openapi_client.Configuration(
+configuration = firspass_client.Configuration(
     host = "http://localhost"
 )
 
 
 # Enter a context with an instance of the API client
-with openapi_client.ApiClient(configuration) as api_client:
+with firspass_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = openapi_client.DefaultApi(api_client)
+    api_instance = firspass_client.DefaultApi(api_client)
     username = 'username_example' # str | 
     password = 'password_example' # str | 
     grant_type = 'grant_type_example' # str |  (optional)
