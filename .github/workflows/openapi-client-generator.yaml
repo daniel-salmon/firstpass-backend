@@ -32,14 +32,14 @@ jobs:
           uv run python -c "import json; from app.main import app; print(json.dumps(app.openapi(), indent=2))" > openapi.json
           rm .env
 
+      - name: Remove old client
+        run: rm -rf python-client
+
       - name: Generate client
         uses: openapi-generators/openapitools-generator-action@v1
         with:
           generator: python
           config-file: openapi-config.yaml
-
-      - name: Remove test file
-        run: rm remove-test-file && echo "DONE!"
 
       - name: Commit generated client
         uses: stefanzweifel/git-auto-commit-action@v5
