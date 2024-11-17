@@ -32,8 +32,13 @@ jobs:
           uv run python -c "import json; from app.main import app; print(json.dumps(app.openapi(), indent=2))" > openapi.json
           rm .env
 
-      - name: Remove old client
-        run: rm -rf python-client
+      - name: Commit changes to OpenAPI spec
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Update openapi.json"
+          commit_user_name: "daniel-salmon"
+          commit_user_email: "salmond44@gmail.com"
+          commit_author: "daniel salmon <salmond44@gmail.com>"
 
       - name: Generate client
         uses: openapi-generators/openapitools-generator-action@v1
@@ -54,7 +59,7 @@ jobs:
           git config --global user.email "salmond44@gmail.com"
           git config --global user.name "daniel salmon"
           git add .
-          git commit -m "Update from daniel-salmon/firstpass-backend${GITHUB_SHA::7}"
+          git commit -m "Update from daniel-salmon/firstpass-backend@${GITHUB_SHA::7}"
           git push --set-upstream origin test
           else
           echo "Nothing to change"
