@@ -1,0 +1,45 @@
+name: Generate OpenAPI Client
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  generate-client:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          version: "0.4.25"
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
+
+      - name: Set up Python
+        run: uv python install
+
+      - name: Install the project
+        run: uv sync --all-extras --dev
+
+      - name: Generate OpenAPI spec
+        run: uv run python -c "import json: from app.main import app: print(json.dumps(app.openapi(), indent=2))" > openapi.json
+
+      - name: Generate client
+        uses: openapi-generators/openapitools-generator-action@v1
+        with:
+          generator: python
+          config-file: openapi-config.yaml
+          output-dir: clients/python
+
+      - name: Commit generated client
+        run: |
+          git config --local user.email "salmond44@gmail.com"
+          git config --local user.name "daniel-salmon"
+          git add openapi.json clients/python
+          git commit -m "Update generated python client" || echo "No changes to commit"
+          git push
