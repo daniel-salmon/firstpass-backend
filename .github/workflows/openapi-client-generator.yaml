@@ -55,12 +55,11 @@ jobs:
           cd clones/firstpass-client
           git status --verbose
           if [ -n "$(git status --porcelain)" ]; then
-          git checkout -b test
           git config --global user.email "salmond44@gmail.com"
           git config --global user.name "daniel salmon"
           git add .
           git commit -m "Update from daniel-salmon/firstpass-backend@${GITHUB_SHA::7}"
-          git push --set-upstream origin test
+          git push origin main
           else
           echo "Nothing to change"
           fi
