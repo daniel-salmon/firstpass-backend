@@ -100,6 +100,20 @@
             }
           }
         }
+      },
+      "delete": {
+        "summary": "Delete User",
+        "operationId": "delete_user_user_delete",
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
       }
     },
     "/blob/{blob_id}": {
