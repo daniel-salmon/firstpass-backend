@@ -200,6 +200,18 @@ def test_get_user(user1: UserTest, client: TestClient):
     assert user_get.blob_id == user1.user.blob_id
 
 
+def test_delete_user_without_auth(client):
+    response = client.delete("/user")
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+
+def test_delete_user(user1: UserTest, client: TestClient):
+    response = client.delete("/user", headers=_build_auth_header(user1.token))
+    assert response.status_code == status.HTTP_204_NO_CONTENT
+    response = client.get("/user", headers=_build_auth_header(user1.token))
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+
 def test_get_blob_without_auth(client):
     response = client.get("/blob/e9dae530-6f2a-4bd2-8bfc-6ea6a747f4c7")
     assert response.status_code == status.HTTP_401_UNAUTHORIZED

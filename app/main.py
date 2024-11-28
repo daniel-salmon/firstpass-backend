@@ -134,6 +134,14 @@ def _add_user(user: User, session: Session) -> User:
     return user
 
 
+def _delete_user(user: User, session: Session) -> None:
+    user_to_delete = session.exec(
+        select(User).where(User.username == user.username)
+    ).one()
+    session.delete(user_to_delete)
+    session.commit()
+
+
 def _update_user_blob(user: User, blob: Blob, session: Session) -> None:
     user.blob = blob.blob
     session.add(user)
@@ -240,6 +248,14 @@ async def post_user(
         settings=settings,
     )
     return Token(access_token=access_token, token_type="bearer")
+
+
+@app.delete("/user", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_user(
+    user: Annotated[User, Depends(_get_current_user)],
+    session: Annotated[Session, Depends(_get_session)],
+) -> None:
+    _delete_user(user, session)
 
 
 @app.get("/blob/{blob_id}", status_code=status.HTTP_200_OK, response_model=Blob)
