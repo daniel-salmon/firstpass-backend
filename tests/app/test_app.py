@@ -1,19 +1,16 @@
+from collections.abc import Generator
+
 import jwt
 import pytest
-from collections.abc import Generator
 from fastapi import status
 from fastapi.encoders import jsonable_encoder
 from fastapi.testclient import TestClient
-from pydantic import BaseModel, UUID4
+from pydantic import UUID4, BaseModel
+from sqlalchemy.engine.base import Engine
 from sqlmodel import Session, create_engine
 from sqlmodel.pool import StaticPool
-from sqlalchemy.engine.base import Engine
 
 from app.main import (
-    app,
-    _create_db_and_tables,
-    _get_session,
-    _get_user,
     Blob,
     JWTSub,
     Settings,
@@ -21,6 +18,10 @@ from app.main import (
     User,
     UserCreate,
     UserGet,
+    _create_db_and_tables,
+    _get_session,
+    _get_user,
+    app,
     parse_database_url,
 )
 

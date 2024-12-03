@@ -10,13 +10,13 @@ from fastapi import Depends, FastAPI, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jwt.exceptions import InvalidTokenError
 from passlib.context import CryptContext
-from pydantic import BaseModel, SecretStr, ValidationError, UUID4
+from pydantic import UUID4, BaseModel, SecretStr, ValidationError
 from pydantic.functional_validators import AfterValidator
 from pydantic.types import StringConstraints
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from sqlmodel import Field, Session, SQLModel, create_engine, select
 from sqlalchemy.engine.base import Engine
 from sqlalchemy.exc import IntegrityError
+from sqlmodel import Field, Session, SQLModel, create_engine, select
 
 
 def parse_database_url(database_url: str) -> str:
