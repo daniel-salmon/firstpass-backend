@@ -13,7 +13,6 @@ from app.main import (
     app,
     _create_db_and_tables,
     _get_session,
-    _get_settings,
     _get_user,
     Blob,
     JWTSub,
@@ -22,20 +21,22 @@ from app.main import (
     User,
     UserCreate,
     UserGet,
+    parse_database_url,
 )
 
 
-@pytest.fixture(scope="module")
-def settings() -> Settings:
-    settings = _get_settings()
-    settings.db_url = "sqlite://"
-    return settings
+@pytest.fixture(scope="function")
+def settings(monkeypatch) -> Settings:
+    monkeypatch.setenv("DATABASE_URL", "sqlite://")
+    return Settings()
 
 
 @pytest.fixture(scope="function")
-def engine(settings: Settings) -> Generator[Engine]:
+def engine(settings: Settings) -> Generator[Engine, None, None]:
     engine = create_engine(
-        settings.db_url, connect_args={"check_same_thread": False}, poolclass=StaticPool
+        settings.database_url,
+        connect_args={"check_same_thread": False},
+        poolclass=StaticPool,
     )
     _create_db_and_tables(engine)
     yield engine
@@ -43,13 +44,13 @@ def engine(settings: Settings) -> Generator[Engine]:
 
 
 @pytest.fixture(scope="function")
-def session(engine: Engine) -> Generator[Session]:
+def session(engine: Engine) -> Generator[Session, None, None]:
     with Session(engine) as session:
         yield session
 
 
 @pytest.fixture(scope="function")
-def client(session: Session) -> Generator[TestClient]:
+def client(session: Session) -> Generator[TestClient, None, None]:
     def _get_session_override():
         return session
 
@@ -90,6 +91,25 @@ def user2(client: TestClient, session: Session) -> UserTest:
 def _build_auth_header(token: Token) -> dict[str, str]:
     header = {"Authorization": f"Bearer {token.access_token}"}
     return header
+
+
+@pytest.mark.parametrize(
+    "in_url, want_url",
+    [
+        ("sqlite://", "sqlite://"),
+        ("sqlite:///my.db", "sqlite:///my.db"),
+        ("postgres://localhost:5432", "postgresql://localhost:5432"),
+        ("postgresql://localhost:5432", "postgresql://localhost:5432"),
+        ("postgres://localhost:5433", "postgresql://localhost:5433"),
+        ("postgresql://localhost:5433", "postgresql://localhost:5433"),
+        ("postgres://localhost/mydb", "postgresql://localhost/mydb"),
+        ("postgresql://localhost/mydb", "postgresql://localhost/mydb"),
+        ("postgres://user:secret@localhost", "postgresql://user:secret@localhost"),
+        ("postgresql://user:secret@localhost", "postgresql://user:secret@localhost"),
+    ],
+)
+def test_parse_database_url(in_url: str, want_url: str) -> None:
+    assert parse_database_url(in_url) == want_url
 
 
 @pytest.mark.parametrize(
