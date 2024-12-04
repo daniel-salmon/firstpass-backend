@@ -23,7 +23,7 @@ def parse_database_url(database_url: str) -> str:
     bad_protocol = "postgres://"
     good_protocol = "postgresql://"
     if database_url.startswith(bad_protocol):
-        return good_protocol + database_url[len(bad_protocol) :]
+        return database_url.replace(bad_protocol, good_protocol, 1)
     return database_url
 
 
