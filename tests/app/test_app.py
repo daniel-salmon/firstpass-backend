@@ -27,7 +27,7 @@ from app.main import (
 
 
 @pytest.fixture(scope="function")
-def settings(monkeypatch) -> Settings:
+def settings(monkeypatch: pytest.MonkeyPatch) -> Settings:
     monkeypatch.setenv("DATABASE_URL", "sqlite://")
     return Settings()
 
