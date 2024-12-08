@@ -22,4 +22,4 @@ WORKDIR /app
 EXPOSE $PORT
 # Prefer this shell form style as opposed to the exec form
 # since it works better with heroku
-CMD gunicorn app.main:app --workers 1 --worker-class uvicorn.workers.UvicornWorker --bind 0.0.0.0:$PORT
+CMD uvicorn app.main:app --port $PORT
