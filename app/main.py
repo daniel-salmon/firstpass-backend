@@ -6,6 +6,7 @@ from typing import Annotated, Self
 from uuid import uuid4
 
 import jwt
+import sentry_sdk
 from fastapi import Depends, FastAPI, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jwt.exceptions import InvalidTokenError
@@ -35,7 +36,9 @@ class Settings(BaseSettings):
     access_token_expire_minutes: timedelta
     pwd_hash_scheme: str
     database_url: Annotated[str, AfterValidator(parse_database_url)]
+    sentry_dsn: str
     debug: bool
+    local_dev: bool = False
 
 
 @lru_cache
@@ -124,6 +127,11 @@ engine: Engine
 async def lifespan(app: FastAPI):
     global engine
     settings = _get_settings()
+    try:
+        sentry_sdk.init(settings.sentry_dsn)
+    except Exception:
+        if not settings.local_dev:
+            raise
     engine = create_engine(settings.database_url, echo=settings.debug)
     _create_db_and_tables(engine)
     yield

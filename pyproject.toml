@@ -14,6 +14,7 @@ dependencies = [
     "pydantic>=2.9.2",
     "pyjwt>=2.9.0",
     "sqlmodel>=0.0.22",
+    "sentry-sdk>=2.19.2",
 ]
 
 [tool.uv]
