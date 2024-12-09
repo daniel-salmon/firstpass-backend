@@ -38,7 +38,6 @@ class Settings(BaseSettings):
     database_url: Annotated[str, AfterValidator(parse_database_url)]
     sentry_dsn: str
     debug: bool
-    local_dev: bool = False
 
 
 @lru_cache
@@ -127,11 +126,7 @@ engine: Engine
 async def lifespan(app: FastAPI):
     global engine
     settings = _get_settings()
-    try:
-        sentry_sdk.init(settings.sentry_dsn)
-    except Exception:
-        if not settings.local_dev:
-            raise
+    sentry_sdk.init(settings.sentry_dsn)
     engine = create_engine(settings.database_url, echo=settings.debug)
     _create_db_and_tables(engine)
     yield
