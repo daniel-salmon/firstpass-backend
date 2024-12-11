@@ -46,7 +46,7 @@ The project was written with the intention of deploying this server on Heroku
 (although very little is custom tailored to Heroku -- perhaps the main thing is
 the way the Docker `CMD` is written in shell form style).  The best
 documentation for that will be Heroku docs, since what is written here will
-inevitably out of date. However, as of this writing the process is:
+inevitably be out of date. However, as of this writing the process is:
 
 Build the image and push to Heroku's container registry:
 
