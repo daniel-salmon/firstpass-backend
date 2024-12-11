@@ -19,5 +19,7 @@ FROM base
 COPY --from=builder /app /app
 ENV PATH="/app/.venv/bin:$PATH"
 WORKDIR /app
-EXPOSE 8000
-CMD ["gunicorn", "-w", "4", "-k", "uvicorn.workers.UvicornWorker", "app.main:app", "--bind", "0.0.0.0:8000"]
+EXPOSE $PORT
+# Prefer this shell form style as opposed to the exec form
+# since it works better with heroku
+CMD uvicorn app.main:app --host 0.0.0.0 --port $PORT

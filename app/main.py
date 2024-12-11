@@ -6,16 +6,26 @@ from typing import Annotated, Self
 from uuid import uuid4
 
 import jwt
+import sentry_sdk
 from fastapi import Depends, FastAPI, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jwt.exceptions import InvalidTokenError
 from passlib.context import CryptContext
-from pydantic import BaseModel, SecretStr, ValidationError, UUID4
+from pydantic import UUID4, BaseModel, SecretStr, ValidationError
+from pydantic.functional_validators import AfterValidator
 from pydantic.types import StringConstraints
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from sqlmodel import Field, Session, SQLModel, create_engine, select
 from sqlalchemy.engine.base import Engine
 from sqlalchemy.exc import IntegrityError
+from sqlmodel import Field, Session, SQLModel, create_engine, select
+
+
+def parse_database_url(database_url: str) -> str:
+    bad_protocol = "postgres://"
+    good_protocol = "postgresql://"
+    if database_url.startswith(bad_protocol):
+        return database_url.replace(bad_protocol, good_protocol, 1)
+    return database_url
 
 
 class Settings(BaseSettings):
@@ -25,7 +35,8 @@ class Settings(BaseSettings):
     jwt_signing_algorithm: str
     access_token_expire_minutes: timedelta
     pwd_hash_scheme: str
-    db_url: str
+    database_url: Annotated[str, AfterValidator(parse_database_url)]
+    sentry_dsn: str
     debug: bool
 
 
@@ -115,7 +126,8 @@ engine: Engine
 async def lifespan(app: FastAPI):
     global engine
     settings = _get_settings()
-    engine = create_engine(settings.db_url, echo=settings.debug)
+    sentry_sdk.init(settings.sentry_dsn)
+    engine = create_engine(settings.database_url, echo=settings.debug)
     _create_db_and_tables(engine)
     yield
     engine.dispose()
