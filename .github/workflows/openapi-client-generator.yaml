@@ -1,0 +1,64 @@
+name: Generate OpenAPI Client
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  generate-client:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          version: "0.4.25"
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
+
+      - name: Set up Python
+        run: uv python install
+
+      - name: Install the project
+        run: uv sync --all-extras --dev
+
+      - name: Generate OpenAPI spec
+        run: |
+          cp example.env .env
+          uv run python -c "import json; from app.main import app; print(json.dumps(app.openapi(), indent=2))" > openapi.json
+          rm .env
+
+      - name: Commit changes to OpenAPI spec
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Update openapi.json"
+          commit_user_name: "daniel-salmon"
+          commit_user_email: "salmond44@gmail.com"
+          commit_author: "daniel salmon <salmond44@gmail.com>"
+
+      - name: Generate client
+        uses: openapi-generators/openapitools-generator-action@v1
+        with:
+          generator: python
+          config-file: openapi-config.yaml
+
+      - name: Deploy client
+        env:
+          CLIENT_REPO_TOKEN: ${{ secrets.CLIENT_REPO_TOKEN }}
+        run: |
+          git clone https://$CLIENT_REPO_TOKEN@github.com/daniel-salmon/firstpass-client.git clones/firstpass-client
+          rsync -avI --delete --exclude '.git/' python-client/ clones/firstpass-client
+          cd clones/firstpass-client
+          git status --verbose
+          if [ -n "$(git status --porcelain)" ]; then
+          git config --global user.email "salmond44@gmail.com"
+          git config --global user.name "daniel salmon"
+          git add .
+          git commit -m "Update from daniel-salmon/firstpass-backend@${GITHUB_SHA::7}"
+          git push origin main
+          else
+          echo "Nothing to change"
+          fi
