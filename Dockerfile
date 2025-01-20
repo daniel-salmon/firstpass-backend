@@ -3,7 +3,7 @@ RUN apt-get update \
 	&& apt-get -y install libpq-dev gcc
 
 FROM base AS builder
-COPY --from=ghcr.io/astral-sh/uv:0.4.25 /uv /bin/uv
+COPY --from=ghcr.io/astral-sh/uv:0.5.21 /uv /bin/uv
 ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy
 WORKDIR /app
 COPY uv.lock pyproject.toml /app
